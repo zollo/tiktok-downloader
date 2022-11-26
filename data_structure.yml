@@ -1,0 +1,182 @@
+Activity:
+  Favorite Effects:
+    FavoriteEffectsList:
+     - Date:
+       EffectLink:
+  Favorite Hashtags:
+    FavoriteHashtagList:
+      - Date:
+        Link:
+  Favorite Sounds:
+    FavoriteSoundList:
+      - Date:
+        Link:
+  Favorite Videos:
+    FavoriteVideoList:
+      - Date:
+        Link:
+  Follower List:
+    FansList:
+      - Date:
+        UserName:
+  Following List:
+    Following:
+      - Date: ""
+        UserName: ""
+  Hashtag:
+    HashtagList:
+      - HashtagName:
+        HashtagLink:
+  Like List:
+    ItemFavoriteList:
+      - Date:
+        Link:
+  Login History:
+    LoginHistoryList:
+      - Date:
+        IP:
+        DeviceModel:
+        DeviceSystem:
+        NetworkType:
+        Carrier:
+  Purchase History:
+    SendGifts:
+      SendGifts:
+        - Date:
+          GiftAmount:
+          UserName:
+    BuyGifts:
+      BuyGifts:
+        - Price:
+          Date:
+  Search History:
+    SearchList:
+      - Date:
+        SearchTerm:
+  Share History:
+    ShareHistoryList:
+      - Date:
+        SharedContent:
+        Link:
+        Method:
+  Status:
+    Status List:
+      - Resolution:
+        AppVersion:
+        IDFA:
+        GAID:
+        Android ID:
+        IDVF:
+        Web ID:
+  Video Browsing History:
+    VideoList:
+      - Date:
+        Link:
+  Settings:
+    SettingsMap:
+      Ads Based on Data Received from Partners: ''
+      Allow DownLoad: ''
+      Allow Others to Find Me: ''
+      App Language: ''
+      Content Preferences:
+        Keyword filters for videos in Following feed: ""
+        Keyword filters for videos in For You feed: ""
+        Video Languages Preferences:
+          - ""
+      Filter Comments: ""
+      Interests: ''
+      Personalized Ads: ""
+      Private Account: ""
+      Push Notification:
+        Desktop notification: ""
+        New Comments on My Video: ""
+        New Fans: ""
+        New Likes on My Video: ""
+      Web Language: N/A
+      Who Can Duet With Me: "" # Everyone
+      Who Can Post Comments: "" # Everyone
+      Who Can Send Me Message: "" # Friends
+      Who Can Stitch with your videos: "" # Everyone
+      Who Can View Videos I Liked: "" # Myself
+  Comment:
+    Comments:
+      CommentsList:
+        - Date: ""
+          Comment: ""
+  Ads and data:
+    Ad Interests:
+      AdInterestCategories: ''
+    Ads Based On Data Received From Partners:
+      DataPartnerList: ''
+      AdvertiserList: ''
+    Usage Data From Third-Party Apps And Websites: {}
+  App Settings:
+    Block:
+      BlockList:
+        - Date: ""
+          UserName: ""
+  Direct Messages:
+    Chat History:
+      ChatHistory:
+        Chat History with X:
+          - Date: ""
+            From: ""
+            Content: ""
+  Profile:
+    Profile Information:
+      ProfileMap:
+        PlatformInfo: []
+        bioDescription: ""
+        birthDate:
+        emailAddress:
+        likesReceived:
+        profilePhoto:
+        profileVideo:
+        telephoneNumber:
+        userName: ''
+  Tiktok Live:
+    Go Live Settings: {}
+    Go Live History:
+      GoLiveList:
+        - LiveStartTime: ""
+          RoomId: ''
+          CoverUri: ""
+          ReplayUrl: ''
+          TotalEarning:
+          LiveEndTime: ""
+          TotalLike: ""
+          TotalView: ""
+          QualitySetting: 480x864
+          RoomTitle: ""
+          TotalGifter:
+          MutedList:
+          LiveDuration:
+    WatchLiveSettings:
+    Watch Live History:
+      WatchLiveMap:
+        '1234567893778563845':
+          WatchTime:
+          Link:
+          Questions:
+          Comments:
+            - CommentTime:
+              CommentContent:
+              RawTime:
+  Video:
+    Videos:
+      VideoList:
+        - Date:
+          Likes:
+          Link:
+  Tiktok Shopping:
+    Communication History: {}
+    Current Payment Information: {}
+    Customer Support History: {}
+    Order Dispute History: {}
+    Order History: {}
+    Product Browsing History: {}
+    Product Review History: {}
+    Return and Refund History: {}
+    Saved Address Information: {}
+    Shopping Cart List: {}
+    Vouchers: {}

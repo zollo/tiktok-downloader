@@ -1,0 +1,4 @@
+user_data.json
+videos/*
+.venv/
+.DS_Store
