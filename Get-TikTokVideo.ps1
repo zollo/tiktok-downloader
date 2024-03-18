@@ -5,7 +5,7 @@
 # raw video files leveraging async HTTP retreival.
 #
 # Note: Requires the ThreadJob PSMOdule, install with `Install-Module ThreadJob`
-# EXAMPLE USAGE: .\Get-TikTokVideo -JsonFile "C:\Data\user_data.json" -OutputFolder "C:\Data\TikTokVideo"
+# Usage: .\Get-TikTokVideo -JsonFile "C:\Data\user_data.json" -OutputFolder "C:\Data\TikTokVideo"
 
 #Requires -Modules ThreadJob
 
@@ -24,7 +24,8 @@ if(-not (Test-Path $JsonFile)) {
 
 # check for valid output folder, create if needed
 if(-not (Test-Path $OutputFolder)) {
-    New-Item -ItemType "directory" -Path "$($(get-location).Path)\TikTok" -Force
+    New-Item -ItemType "directory" -Path $OutputFolder -Force
+    Write-Output "[INFO] Successfully created folder $OutputFolder"
 }
 
 # read json
@@ -32,6 +33,7 @@ $json = [PSCustomObject](Get-Content $JsonFile | Out-String | ConvertFrom-Json)
 Write-Output "[INFO] Successfully parsed & loaded user data at $JsonFile"
 
 $jobs = @()
+$total = $json.Video.Videos.VideoList.Length
 
 # loop over videos and download
 $json.Video.Videos.VideoList | ForEach-Object {
@@ -39,14 +41,17 @@ $json.Video.Videos.VideoList | ForEach-Object {
     $uri = $_.Link
     # generate unique file name by removing invalid characters
     $filename = $_.Date.replace(" ", "-").replace(":","-") + ".mp4"
+    # parse date field
+    $date = [datetime]::ParseExact($_.Date, "yyyy-MM-dd HH:mm:ss", $null)
     # check if file already exists
     if(-not (Test-Path $filename) -or $Force) {
         # generate thread job
-        $jobs += Start-ThreadJob -Name $filename -ScriptBlock {
+        $jobs += Start-ThreadJob -StreamingHost $Host -Name $filename -ScriptBlock {
             $Uri = $using:uri
             $OutFile = "$using:OutputFolder\$using:filename"
             try {
-                $resp = Invoke-WebRequest -Uri $Uri -OutFile $OutFile
+                $resp = Invoke-WebRequest -TimeoutSec 30 -Uri $Uri -OutFile $OutFile
+                (Get-ChildItem $OutFile).CreationTime = $using:date
                 Write-Output "[INFO] Wrote file to $OutFile"
             } catch {
                 $status = $_.Exception.Response.StatusCode.value__
