@@ -16,9 +16,22 @@ Now download the ZIP file to your computer and unzip, you should end up with a f
 .\Get-TikTokVideo.ps1 -JsonFile "C:\TikTok\user_data.json" -OutputFolder "C:\TikTok\Videos"
 ```
 
+The PowerShell version of this tool accepts several command line paramaters to control the tool's behavior.
+
 * -JsonFile, Path to the TikTok user data JSON file
 * -OutputFolder, Video download destination path
 * -Force, If set to true files will be re-downloaded
+* -Verbose, If set to true, the script will output more data to the console
+
+## Executing PowerShell Scripts
+
+In certain cases, it may be necessary to set the script execution policy for your current user. For example, users still running PowerShell 5.x.
+
+To set the execution policy for your user, use the following command:
+
+```
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+```
 
 ## CLI Arguments (Python)
 

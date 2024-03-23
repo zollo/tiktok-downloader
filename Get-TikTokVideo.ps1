@@ -60,6 +60,43 @@ $json.Video.Videos.VideoList | ForEach-Object {
 Write-Host "[INFO] Writing Videos to $OutputFolder"
 Write-Host "[INFO] Starting TikTok Video download, this may take a while!"
 
+Function Get-TikTokDownload {
+    param($Uri,$OutFile,$Date,$File)
+
+    # parse video post
+    try {
+        $dl = New-Object System.Net.WebClient
+        $dl.DownloadFile($Uri, $OutFile)
+
+        # verify file integrity
+        $dl_file = Get-Item -LiteralPath $OutFile
+
+        # compare length to expected legnth
+        if($dl_file.Length -eq $dl.ResponseHeaders['Content-Length']) {
+            # write success log entry
+            Write-Host "[INFO][$File] Downloaded file to $OutFile"
+        } else {
+            # throw error
+            Write-Error "[ERROR][$File] Downloaded file size doesn't match expected length!"
+            throw "Downloaded file size doesn't match expected content length!"
+        }
+
+        # set the creation date from json metadata
+        (Get-ChildItem $OutFile).CreationTime = $Date
+    } catch {
+        # save exception data
+        $status = $_.Exception.Response.StatusCode.value__
+
+        # write error to console
+        Write-Error "[ERROR][$File] Failed to download - HTTP Error $status"
+
+        # cleanup partially downloaded file
+        if(Test-Path -LiteralPath $OutFile) {
+            Remove-Item -LiteralPath $OutFile -Force
+        }
+    }
+}
+
 # loop over videos and download
 $json.Video.Videos.VideoList | ForEach-Object {
     # generate http url
@@ -72,8 +109,9 @@ $json.Video.Videos.VideoList | ForEach-Object {
     # parse date field
     $date = [datetime]::ParseExact($_.Date, "yyyy-MM-dd HH:mm:ss", $null)
 
-    if(Test-Path $full_path) {
-        # get filesize
+    # check if path exists
+    if(Test-Path -LiteralPath $full_path) {
+        # get filesize of existing file
         $filedata = Get-Item -LiteralPath $full_path
 
         # cleanup erroneous files less than 1000 bytes
@@ -84,36 +122,31 @@ $json.Video.Videos.VideoList | ForEach-Object {
 
     if($uri -eq "N/A") {
         # parse erroneous post
-        Write-Host "[INFO][$filename] has no available link, skipping." -ForegroundColor Cyan
+        Write-Host "[INFO][$filename] has no available link, skipping." `
+            -ForegroundColor Cyan
     } elseif($uri.split(' ').Length -gt 1) {
         # parse photos post
-        Write-Host "[INFO][$filename] is a photos post, skipping." -ForegroundColor DarkMagenta
+        Write-Host "[INFO][$filename] is a photos post, skipping." `
+            -ForegroundColor DarkMagenta
     } else {
         # check if file already exists
         if(-not (Test-Path $full_path) -or $Force) {
             # generate thread job
             $jobs += Start-ThreadJob -StreamingHost $Host -Name $filename -ScriptBlock {
-                $Uri = $using:uri
-                $OutFile = "$using:OutputFolder\$using:filename"
-                # parse video post
-                try {
-                    $resp = Invoke-WebRequest -TimeoutSec 30 -Uri $using:uri -OutFile $OutFile
-                    # set the creation date from json metadata
-                    (Get-ChildItem $OutFile).CreationTime = $using:date
-                    Write-Host "[INFO][$using:filename] Wrote file to $OutFile"
-                } catch {
-                    # save exception data
-                    $status = $_.Exception.Response.StatusCode.value__
-                    Write-Error "[ERROR][$using:filename] Failed to download - HTTP Error $status"
-                    # cleanup partially downloaded file
-                    if(Test-Path $using:full_path) {
-                        Remove-Item -LiteralPath $using:full_path -Force
-                    }
+                $params = @{
+                    Uri = $using:uri
+                    File = $using:filename
+                    OutFile = $using:OutputFolder
+                    Date = $using:date
                 }
+
+                # parse video post
+                Get-TikTokDownload @params
             }
         } else {
             if($Verbose) {
-                Write-Host "[INFO][$filename] already downloaded, skipping!" -ForegroundColor DarkCyan
+                Write-Host "[INFO][$filename] already downloaded, skipping!" `
+                    -ForegroundColor DarkCyan
             }
         }
     }
